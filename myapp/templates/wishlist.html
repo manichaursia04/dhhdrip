@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Wishlist | dhhDRIP{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb Begin -->
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__links">
+                    <a href="{% url 'home' %}"><i class="fa fa-home"></i> Home</a>
+                    <span>Wishlist</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Wishlist Section Begin -->
+<section class="shop-cart spad wishlist-section">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h4>My Wishlist</h4>
+                    <p class="wishlist-subtitle">Items you've saved for later — move them to cart when you're ready.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shop__cart__table wishlist-table">
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th>Action</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="cart__product__item">
+                                        <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=120&h=120&fit=crop" alt="Chain bucket bag">
+                                        <div class="cart__product__item__title">
+                                            <h6><a href="{% url 'product-details' %}">Chain bucket bag</a></h6>
+                                            <div class="rating">
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="cart__price">$ 150.0</td>
+                                    <td><span class="badge badge-success wishlist-stock">In Stock</span></td>
+                                    <td>
+                                        <a href="{% url 'cart' %}" class="site-btn wishlist-btn">Add to Cart</a>
+                                    </td>
+                                    <td class="cart__close"><span class="icon_close"></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="cart__product__item">
+                                        <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=120&h=120&fit=crop" alt="Zip-pockets pebbled tote">
+                                        <div class="cart__product__item__title">
+                                            <h6><a href="{% url 'product-details' %}">Zip-pockets pebbled tote</a></h6>
+                                            <div class="rating">
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="cart__price">$ 170.0</td>
+                                    <td><span class="badge badge-success wishlist-stock">In Stock</span></td>
+                                    <td>
+                                        <a href="{% url 'cart' %}" class="site-btn wishlist-btn">Add to Cart</a>
+                                    </td>
+                                    <td class="cart__close"><span class="icon_close"></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="cart__product__item">
+                                        <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=120&h=120&fit=crop" alt="Black jean">
+                                        <div class="cart__product__item__title">
+                                            <h6><a href="{% url 'product-details' %}">Black jean</a></h6>
+                                            <div class="rating">
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="cart__price">$ 85.0</td>
+                                    <td><span class="badge badge-warning wishlist-stock wishlist-stock--low">Low Stock</span></td>
+                                    <td>
+                                        <a href="{% url 'cart' %}" class="site-btn wishlist-btn">Add to Cart</a>
+                                    </td>
+                                    <td class="cart__close"><span class="icon_close"></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="cart__product__item">
+                                        <img src="https://images.unsplash.com/photo-1594633312681-425a7b956cc9?w=120&h=120&fit=crop" alt="Flowy striped skirt">
+                                        <div class="cart__product__item__title">
+                                            <h6><a href="{% url 'product-details' %}">Flowy striped skirt</a></h6>
+                                            <div class="rating">
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star"></i>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="cart__price">$ 49.0</td>
+                                    <td><span class="badge badge-success wishlist-stock">In Stock</span></td>
+                                    <td>
+                                        <a href="{% url 'cart' %}" class="site-btn wishlist-btn">Add to Cart</a>
+                                    </td>
+                                    <td class="cart__close"><span class="icon_close"></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="cart__btn">
+                    <a href="{% url 'shop' %}">Continue Shopping</a>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="cart__btn update__btn text-right text-sm-left">
+                    <a href="{% url 'liked' %}"><span class="icon_heart_alt"></span> View Liked Items</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 offset-lg-8 col-md-6 offset-md-6">
+                <div class="cart__total__procced wishlist-summary">
+                    <h6>Wishlist Summary</h6>
+                    <ul>
+                        <li>Total Items <span>4</span></li>
+                        <li>Estimated Total <span>$ 454.0</span></li>
+                    </ul>
+                    <a href="{% url 'cart' %}" class="primary-btn">Add All to Cart</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Wishlist Section End -->
+{% endblock %}

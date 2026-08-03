@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Liked | dhhDRIP{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb Begin -->
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__links">
+                    <a href="{% url 'home' %}"><i class="fa fa-home"></i> Home</a>
+                    <span>Liked</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Liked Section Begin -->
+<section class="shop spad liked-section">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-lg-8">
+                <div class="section-title">
+                    <h4>Liked Items</h4>
+                    <p class="wishlist-subtitle">Products you've hearted — tap the heart to unlike.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="liked-filter text-lg-right">
+                    <span class="liked-count"><i class="fa fa-heart"></i> 6 items liked</span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="product__item liked-item">
+                    <div class="product__item__pic set-bg liked-item__pic" data-setbg="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500&h=600&fit=crop">
+                        <button type="button" class="liked-item__heart liked-item__heart--active" aria-label="Unlike">
+                            <i class="fa fa-heart"></i>
+                        </button>
+                        <ul class="product__hover">
+                            <li><a href="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800" class="image-popup"><span class="arrow_expand"></span></a></li>
+                            <li><a href="{% url 'wishlist' %}"><span class="icon_heart_alt"></span></a></li>
+                            <li><a href="{% url 'cart' %}"><span class="icon_bag_alt"></span></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="{% url 'product-details' %}">Furry hooded parka</a></h6>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="product__price">$ 59.0</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="product__item liked-item">
+                    <div class="product__item__pic set-bg liked-item__pic" data-setbg="https://images.unsplash.com/photo-1594633312681-425a7b956cc9?w=500&h=600&fit=crop">
+                        <button type="button" class="liked-item__heart liked-item__heart--active" aria-label="Unlike">
+                            <i class="fa fa-heart"></i>
+                        </button>
+                        <ul class="product__hover">
+                            <li><a href="https://images.unsplash.com/photo-1594633312681-425a7b956cc9?w=800" class="image-popup"><span class="arrow_expand"></span></a></li>
+                            <li><a href="{% url 'wishlist' %}"><span class="icon_heart_alt"></span></a></li>
+                            <li><a href="{% url 'cart' %}"><span class="icon_bag_alt"></span></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="{% url 'product-details' %}">Flowy striped skirt</a></h6>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="product__price">$ 49.0</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="product__item liked-item">
+                    <div class="product__item__pic set-bg liked-item__pic" data-setbg="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500&h=600&fit=crop">
+                        <button type="button" class="liked-item__heart liked-item__heart--active" aria-label="Unlike">
+                            <i class="fa fa-heart"></i>
+                        </button>
+                        <ul class="product__hover">
+                            <li><a href="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=800" class="image-popup"><span class="arrow_expand"></span></a></li>
+                            <li><a href="{% url 'wishlist' %}"><span class="icon_heart_alt"></span></a></li>
+                            <li><a href="{% url 'cart' %}"><span class="icon_bag_alt"></span></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="{% url 'product-details' %}">Croc-effect bag</a></h6>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="product__price">$ 59.0</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="product__item liked-item">
+                    <div class="product__item__pic set-bg liked-item__pic" data-setbg="https://images.unsplash.com/photo-1542272604-787c3835535d?w=500&h=600&fit=crop">
+                        <button type="button" class="liked-item__heart liked-item__heart--active" aria-label="Unlike">
+                            <i class="fa fa-heart"></i>
+                        </button>
+                        <ul class="product__hover">
+                            <li><a href="https://images.unsplash.com/photo-1542272604-787c3835535d?w=800" class="image-popup"><span class="arrow_expand"></span></a></li>
+                            <li><a href="{% url 'wishlist' %}"><span class="icon_heart_alt"></span></a></li>
+                            <li><a href="{% url 'cart' %}"><span class="icon_bag_alt"></span></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="{% url 'product-details' %}">Dark wash Xavi jeans</a></h6>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="product__price">$ 79.0</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="product__item liked-item">
+                    <div class="product__item__pic set-bg liked-item__pic" data-setbg="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&h=600&fit=crop">
+                        <button type="button" class="liked-item__heart liked-item__heart--active" aria-label="Unlike">
+                            <i class="fa fa-heart"></i>
+                        </button>
+                        <ul class="product__hover">
+                            <li><a href="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800" class="image-popup"><span class="arrow_expand"></span></a></li>
+                            <li><a href="{% url 'wishlist' %}"><span class="icon_heart_alt"></span></a></li>
+                            <li><a href="{% url 'cart' %}"><span class="icon_bag_alt"></span></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="{% url 'product-details' %}">Belted trench coat</a></h6>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="product__price">$ 120.0</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="product__item liked-item">
+                    <div class="product__item__pic set-bg liked-item__pic" data-setbg="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=500&h=600&fit=crop">
+                        <button type="button" class="liked-item__heart liked-item__heart--active" aria-label="Unlike">
+                            <i class="fa fa-heart"></i>
+                        </button>
+                        <ul class="product__hover">
+                            <li><a href="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=800" class="image-popup"><span class="arrow_expand"></span></a></li>
+                            <li><a href="{% url 'wishlist' %}"><span class="icon_heart_alt"></span></a></li>
+                            <li><a href="{% url 'cart' %}"><span class="icon_bag_alt"></span></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="{% url 'product-details' %}">Silk wrap dress</a></h6>
+                        <div class="rating">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                        <div class="product__price">$ 95.0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-lg-12 text-center">
+                <a href="{% url 'shop' %}" class="primary-btn">Discover More</a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Liked Section End -->
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.querySelectorAll('.liked-item__heart').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var item = this.closest('.liked-item');
+            item.style.opacity = '0';
+            item.style.transform = 'scale(0.95)';
+            setTimeout(function() { item.remove(); }, 300);
+        });
+    });
+</script>
+{% endblock %}
