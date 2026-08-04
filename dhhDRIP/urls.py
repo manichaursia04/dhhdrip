@@ -41,7 +41,11 @@ urlpatterns = [
     path('checkout/', views.checkout, name='checkout'),
     path('cart/', views.cart, name='cart'),
 
-    path('product-details/', views.product_details, name='product-details'),
+    path(
+    "product/<slug:slug>/",
+    views.product_details,
+    name="product-details",
+),
     path('blog-details/', views.blog_details, name='blog-details'),
 
     path('wishlist/', views.wishlist, name='wishlist'),

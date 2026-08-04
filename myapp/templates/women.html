@@ -64,7 +64,7 @@
                             <li><a href="{% url 'shop' %}">Shop</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="dropdown">
-                                    <li><a href="{% url 'product-details' %}">Product Details</a></li>
+                                    <li><a href="#">Product Details</a></li>
                                     <li><a href="{% url 'cart' %}">Shop Cart</a></li>
                                     <li><a href="{% url 'checkout' %}">Checkout</a></li>
                                     <li><a href="{% url 'blog-details' %}">Blog Details</a></li>
@@ -247,13 +247,13 @@
                                     <div class="label sale">Sale</div>
                                     {% endif %}
                                     <ul class="product__hover">
-                                        <li><a href="{{ product.image.url }}" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                        <li><a href="{% url 'product-details' product.slug %}"><span class="arrow_expand"></span></a></li>
                                         <li><a href="#"><span class="icon_heart_alt"></span></a></li>
                                         <li><a href="{% url 'cart' %}"><span class="icon_bag_alt"></span></a></li>
                                     </ul>
                                 </div>
                                 <div class="product__item__text">
-                                    <h6><a href="{% url 'product-details' %}">{{ product.name }}</a></h6>
+                                    <h6><a href="{% url 'product-details' product.slug %}">{{ product.name }}</a></h6>
                                     <div class="rating">
                                         <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
                                     </div>

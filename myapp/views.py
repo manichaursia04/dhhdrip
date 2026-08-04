@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Category
 from .models import Product,SubCategory
 
@@ -50,8 +50,28 @@ def cart(request):
     return render(request, "shop-cart.html")
 
 
-def product_details(request):
-    return render(request, "product-details.html")
+def product_details(request, slug):
+
+    product = get_object_or_404(
+        Product,
+        slug=slug
+    )
+
+    related_products = Product.objects.filter(
+        category=product.category,
+        is_available=True
+    ).exclude(id=product.id)[:4]
+
+    context = {
+        "product": product,
+        "related_products": related_products,
+    }
+
+    return render(
+        request,
+        "product-details.html",
+        context
+    )
 
 
 def blog_details(request):
