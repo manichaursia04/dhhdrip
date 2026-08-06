@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <html lang="zxx">
 
-
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Ashion Template">
@@ -40,10 +39,10 @@
         <ul class="offcanvas__widget">
             <li><span class="icon_search search-switch"></span></li>
             <li><a href="#"><span class="icon_heart_alt"></span>
-                <div class="tip">2</div>
+                <div class="tip">{{ cart.get_total_quantity }}</div>
             </a></li>
-            <li><a href="#"><span class="icon_bag_alt"></span>
-                <div class="tip">2</div>
+            <li><a href="{% url 'cart' %}"><span class="icon_bag_alt"></span>
+                <div class="tip">{{ cart.get_total_quantity }}</div>
             </a></li>
         </ul>
         <div class="offcanvas__logo">
@@ -51,8 +50,8 @@
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__auth">
-            <a href="{% url 'login' %}">Login</a>
-            <a href="{% url 'register' %}">Register</a>
+            <a href="#">Login</a>
+            <a href="#">Register</a>
         </div>
     </div>
     <!-- Offcanvas Menu End -->
@@ -69,32 +68,28 @@
                 <div class="col-xl-6 col-lg-7">
                     <nav class="header__menu">
                         <ul>
-                            <li class="active"><a href="{% url 'home' %}">Home</a></li>
+                            <li><a href="{% url 'home' %}">Home</a></li>
                             <li><a href="#">Women’s</a></li>
                             <li><a href="#">Men’s</a></li>
                             <li><a href="{% url 'shop' %}">Shop</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="dropdown">
-                                    <li><a href="{% url 'product-details' %}">Product Details</a></li>
+                                    <li><a href="./product-details.html">Product Details</a></li>
                                     <li><a href="{% url 'cart' %}">Shop Cart</a></li>
                                     <li><a href="{% url 'checkout' %}">Checkout</a></li>
-                                    <li><a href="{% url 'wishlist' %}">Wishlist</a></li>
-                                    <li><a href="{% url 'liked' %}">Liked</a></li>
-                                    <li><a href="{% url 'login' %}">Login</a></li>
-                                    <li><a href="{% url 'register' %}">Register</a></li>
-                                    <li><a href="{% url 'blog-details' %}">Blog Details</a></li>
+                                    <li><a href="./blog-details.html">Blog Details</a></li>
                                 </ul>
                             </li>
-                            <li><a href="{% url 'blog' %}">Blog</a></li>
-                            <li><a href="{% url 'contact' %}">Contact</a></li>
+                            <li><a href="./blog.html">Blog</a></li>
+                            <li><a href="./contact.html">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
                 <div class="col-lg-3">
                     <div class="header__right">
                         <div class="header__right__auth">
-                            <a href="{% url 'login' %}">Login</a>
-                            <a href="{% url 'register' %}">Register</a>
+                            <a href="#">Login</a>
+                            <a href="#">Register</a>
                         </div>
                         <ul class="header__right__widget">
                             <li><span class="icon_search search-switch"></span></li>
@@ -121,7 +116,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb__links">
-                        <a href="./index.html"><i class="fa fa-home"></i> Home</a>
+                        <a href="{% url 'home' %}"><i class="fa fa-home"></i> Home</a>
                         <span>Shopping cart</span>
                     </div>
                 </div>
@@ -147,98 +142,34 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="cart__product__item">
-                                        <img src="{% static 'img/shop-cart/cp-1.jpg' %}" alt="">
-                                        <div class="cart__product__item__title">
-                                            <h6>Chain bucket bag</h6>
-                                            <div class="rating">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="cart__price">$ 150.0</td>
-                                    <td class="cart__quantity">
-                                        <div class="pro-qty">
-                                            <input type="text" value="1">
-                                        </div>
-                                    </td>
-                                    <td class="cart__total">$ 300.0</td>
-                                    <td class="cart__close"><span class="icon_close"></span></td>
-                                </tr>
-                                <tr>
-                                    <td class="cart__product__item">
-                                        <img src="{% static 'img/shop-cart/cp-2.jpg' %}" alt="">
-                                        <div class="cart__product__item__title">
-                                            <h6>Zip-pockets pebbled tote briefcase</h6>
-                                            <div class="rating">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="cart__price">$ 170.0</td>
-                                    <td class="cart__quantity">
-                                        <div class="pro-qty">
-                                            <input type="text" value="1">
-                                        </div>
-                                    </td>
-                                    <td class="cart__total">$ 170.0</td>
-                                    <td class="cart__close"><span class="icon_close"></span></td>
-                                </tr>
-                                <tr>
-                                    <td class="cart__product__item">
-                                        <img src="{% static 'img/shop-cart/cp-3.jpg' %}" alt="">
-                                        <div class="cart__product__item__title">
-                                            <h6>Black jean</h6>
-                                            <div class="rating">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="cart__price">$ 85.0</td>
-                                    <td class="cart__quantity">
-                                        <div class="pro-qty">
-                                            <input type="text" value="1">
-                                        </div>
-                                    </td>
-                                    <td class="cart__total">$ 170.0</td>
-                                    <td class="cart__close"><span class="icon_close"></span></td>
-                                </tr>
-                                <tr>
-                                    <td class="cart__product__item">
-                                        <img src="{% static 'img/shop-cart/cp-4.jpg' %}" alt="">
-                                        <div class="cart__product__item__title">
-                                            <h6>Cotton Shirt</h6>
-                                            <div class="rating">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="cart__price">$ 55.0</td>
-                                    <td class="cart__quantity">
-                                        <div class="pro-qty">
-                                            <input type="text" value="1">
-                                        </div>
-                                    </td>
-                                    <td class="cart__total">$ 110.0</td>
-                                    <td class="cart__close"><span class="icon_close"></span></td>
-                                </tr>
+                                {% if cart.get_total_quantity %}
+                                    {% for item in cart %}
+                                        <tr>
+                                            <td class="cart__product__item">
+                                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                                                <div class="cart__product__item__title">
+                                                    <h6>{{ item.product.name }}</h6>
+                                                </div>
+                                            </td>
+                                            <td class="cart__price">₹{{ item.price }}</td>
+                                            <td class="cart__quantity">
+                                                <div class="pro-qty">
+                                                    <a class="dec qtybtn" href="{% url 'decrease_quantity' item.product.id %}" aria-label="Decrease quantity">-</a>
+                                                    <input type="text" value="{{ item.quantity }}" readonly aria-label="Quantity">
+                                                    <a class="inc qtybtn" href="{% url 'increase_quantity' item.product.id %}" aria-label="Increase quantity">+</a>
+                                                </div>
+                                            </td>
+                                            <td class="cart__total">₹{{ item.total }}</td>
+                                            <td class="cart__close">
+                                                <a href="{% url 'remove_from_cart' item.product.id %}" aria-label="Remove {{ item.product.name }}"><span class="icon_close"></span></a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center py-5"><h4>Your cart is empty.</h4></td>
+                                    </tr>
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>
@@ -247,12 +178,12 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="cart__btn">
-                        <a href="#">Continue Shopping</a>
+                        <a href="{% url 'shop' %}">Continue Shopping</a>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="cart__btn update__btn">
-                        <a href="#"><span class="icon_loading"></span> Update cart</a>
+                        <a href="{% url 'cart' %}"><span class="icon_loading"></span> Update cart</a>
                     </div>
                 </div>
             </div>
@@ -270,10 +201,10 @@
                     <div class="cart__total__procced">
                         <h6>Cart total</h6>
                         <ul>
-                            <li>Subtotal <span>$ 750.0</span></li>
-                            <li>Total <span>$ 750.0</span></li>
+                            <li>Subtotal <span>₹{{ total }}</span></li>
+                            <li>Total <span>₹{{ total }}</span></li>
                         </ul>
-                        <a href="#" class="primary-btn">Proceed to checkout</a>
+                        <a href="{% url 'checkout' %}" class="primary-btn">Proceed to checkout</a>
                     </div>
                 </div>
             </div>
@@ -289,7 +220,7 @@
                     <div class="instagram__item set-bg" data-setbg="{% static 'img/instagram/insta-1.jpg' %}">
                         <div class="instagram__text">
                             <i class="fa fa-instagram"></i>
-                            <a href="#">@dhhDRIP_shop</a>
+                            <a href="#">@ ashion_shop</a>
                         </div>
                     </div>
                 </div>
@@ -297,7 +228,7 @@
                     <div class="instagram__item set-bg" data-setbg="{% static 'img/instagram/insta-2.jpg' %}">
                         <div class="instagram__text">
                             <i class="fa fa-instagram"></i>
-                            <a href="#">@dhhDRIP_shop</a>
+                            <a href="#">@ ashion_shop</a>
                         </div>
                     </div>
                 </div>
@@ -305,7 +236,7 @@
                     <div class="instagram__item set-bg" data-setbg="{% static 'img/instagram/insta-3.jpg' %}">
                         <div class="instagram__text">
                             <i class="fa fa-instagram"></i>
-                            <a href="#">@dhhDRIP_shop</a>
+                            <a href="#">@ ashion_shop</a>
                         </div>
                     </div>
                 </div>
@@ -313,7 +244,7 @@
                     <div class="instagram__item set-bg" data-setbg="{% static 'img/instagram/insta-4.jpg' %}">
                         <div class="instagram__text">
                             <i class="fa fa-instagram"></i>
-                            <a href="#">@dhhDRIP_shop</a>
+                            <a href="#">@ ashion_shop</a>
                         </div>
                     </div>
                 </div>
@@ -321,7 +252,7 @@
                     <div class="instagram__item set-bg" data-setbg="{% static 'img/instagram/insta-5.jpg' %}">
                         <div class="instagram__text">
                             <i class="fa fa-instagram"></i>
-                            <a href="#">@dhhDRIP_shop</a>
+                            <a href="#">@ ashion_shop</a>
                         </div>
                     </div>
                 </div>
@@ -329,7 +260,7 @@
                     <div class="instagram__item set-bg" data-setbg="{% static 'img/instagram/insta-6.jpg' %}">
                         <div class="instagram__text">
                             <i class="fa fa-instagram"></i>
-                            <a href="#">@dhhDRIP_shop</a>
+                            <a href="#">@ ashion_shop</a>
                         </div>
                     </div>
                 </div>
@@ -435,3 +366,4 @@
 </body>
 
 </html>
+

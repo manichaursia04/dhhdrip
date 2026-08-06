@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404 , redirect
 from .models import Category
 from .models import Product,SubCategory
+from .cart import Cart
 
 
 from .models import Category, Product
@@ -45,9 +46,69 @@ def contact(request):
 def checkout(request):
     return render(request, "checkout.html")
 
+# cart sectionn start
 
 def cart(request):
-    return render(request, "shop-cart.html")
+
+    cart = Cart(request)
+
+    context = {
+        "cart": cart,
+        "total": cart.get_total_price(),
+    }
+
+    return render(request, "shop-cart.html", context)
+def add_to_cart(request, slug):
+
+    product = get_object_or_404(
+        Product,
+        slug=slug
+    )
+
+    cart = Cart(request)
+
+    cart.add(product)
+
+    return redirect("cart")
+def remove_from_cart(request, product_id):
+
+    product = get_object_or_404(
+        Product,
+        id=product_id
+    )
+
+    cart = Cart(request)
+
+    cart.remove(product)
+
+    return redirect("cart")
+def increase_quantity(request, product_id):
+
+    product = get_object_or_404(
+        Product,
+        id=product_id
+    )
+
+    cart = Cart(request)
+
+    cart.add(product)
+
+    return redirect("cart")
+def decrease_quantity(request, product_id):
+
+    product = get_object_or_404(
+        Product,
+        id=product_id
+    )
+
+    cart = Cart(request)
+
+    cart.decrease(product)
+
+    return redirect("cart")
+
+    # cart section
+    
 
 
 def product_details(request, slug):
@@ -172,3 +233,4 @@ def register(request):
     return render(request, "register.html")
 def base(request):
     return render(request, "base.html")
+

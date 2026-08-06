@@ -52,6 +52,30 @@ urlpatterns = [
     path('liked/', views.liked, name='liked'),
     path('login/', views.login, name='login'),
     path('register/', views.register, name='register'),
+    path(
+    "add-to-cart/<slug:slug>/",
+    views.add_to_cart,
+    name="add_to_cart",
+),
+
+path(
+    "cart/remove/<int:product_id>/",
+    views.remove_from_cart,
+    name="remove_from_cart",
+),
+
+path(
+    "cart/increase/<int:product_id>/",
+    views.increase_quantity,
+    name="increase_quantity",
+),
+
+path(
+    "cart/decrease/<int:product_id>/",
+    views.decrease_quantity,
+    name="decrease_quantity",
+),
+    
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
