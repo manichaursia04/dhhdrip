@@ -141,36 +141,63 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {% if cart.get_total_quantity %}
-                                    {% for item in cart %}
-                                        <tr>
-                                            <td class="cart__product__item">
-                                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
-                                                <div class="cart__product__item__title">
-                                                    <h6>{{ item.product.name }}</h6>
-                                                </div>
-                                            </td>
-                                            <td class="cart__price">₹{{ item.price }}</td>
-                                            <td class="cart__quantity">
-                                                <div class="pro-qty">
-                                                    <a class="dec qtybtn" href="{% url 'decrease_quantity' item.product.id %}" aria-label="Decrease quantity">-</a>
-                                                    <input type="text" value="{{ item.quantity }}" readonly aria-label="Quantity">
-                                                    <a class="inc qtybtn" href="{% url 'increase_quantity' item.product.id %}" aria-label="Increase quantity">+</a>
-                                                </div>
-                                            </td>
-                                            <td class="cart__total">₹{{ item.total }}</td>
-                                            <td class="cart__close">
-                                                <a href="{% url 'remove_from_cart' item.product.id %}" aria-label="Remove {{ item.product.name }}"><span class="icon_close"></span></a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                {% else %}
-                                    <tr>
-                                        <td colspan="5" class="text-center py-5"><h4>Your cart is empty.</h4></td>
-                                    </tr>
-                                {% endif %}
-                            </tbody>
+                           <tbody>
+    {% if cart.get_total_quantity %}
+        {% for item in cart %}
+        <tr>
+            <td class="cart__product__item">
+                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                <div class="cart__product__item__title">
+                    <h6>{{ item.product.name }}</h6>
+                </div>
+            </td>
+
+            <td class="cart__price">
+                ₹{{ item.price }}
+            </td>
+
+            <td class="cart__quantity">
+                <div class="d-flex align-items-center justify-content-center">
+
+                    <a href="{% url 'decrease_quantity' item.product.id %}"
+                       class="btn btn-light btn-sm">
+                        <i class="fa fa-minus"></i>
+                    </a>
+
+                    <input
+                        type="text"
+                        value="{{ item.quantity }}"
+                        readonly
+                        class="form-control text-center mx-2"
+                        style="width:60px;">
+
+                    <a href="{% url 'increase_quantity' item.product.id %}"
+                       class="btn btn-light btn-sm">
+                        <i class="fa fa-plus"></i>
+                    </a>
+
+                </div>
+            </td>
+
+            <td class="cart__total">
+                ₹{{ item.total }}
+            </td>
+
+            <td class="cart__close">
+                <a href="{% url 'remove_from_cart' item.product.id %}">
+                    <span class="icon_close"></span>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="5" class="text-center py-5">
+                <h4>Your cart is empty.</h4>
+            </td>
+        </tr>
+    {% endif %}
+</tbody>
                         </table>
                     </div>
                 </div>

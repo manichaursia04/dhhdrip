@@ -110,13 +110,16 @@ def decrease_quantity(request, product_id):
     # cart section
     
 
-
 def product_details(request, slug):
 
     product = get_object_or_404(
         Product,
         slug=slug
     )
+
+    print(product.name)
+    print(product.price)
+    print(product.category.name)
 
     related_products = Product.objects.filter(
         category=product.category,
@@ -128,11 +131,7 @@ def product_details(request, slug):
         "related_products": related_products,
     }
 
-    return render(
-        request,
-        "product-details.html",
-        context
-    )
+    return render(request, "product-details.html", context)
 
 
 def blog_details(request):
