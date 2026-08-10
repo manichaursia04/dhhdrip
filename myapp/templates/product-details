@@ -254,9 +254,13 @@
               <div class="product__details__widget">
                 <ul>
                   <li>
-                    
+                    <span>Availability:</span>
                     <div class="stock__checkbox">
-                     
+                      <label for="stockin">
+                        In Stock
+                        <input id="stockin" type="checkbox" />
+                        <span class="checkmark"></span>
+                      </label>
                     </div>
                   </li>
                   <li>
@@ -286,16 +290,15 @@
                     <div class="size__btn">
                       {% for size in product.sizes.all %}
                       <label for="size{{ size.id }}">
-    <input
-        id="size{{ size.id }}"
-        type="radio"
-        name="size"
-        value="{{ size.name }}"
-        {% if size.name == "S" %}checked{% endif %}
-        required
-    />
-    {{ size.name }}
-</label>
+                        <input
+                          id="size{{ size.id }}"
+                          type="radio"
+                          name="size"
+                          value="{{ size.name }}"
+                          required
+                        />
+                        {{ size.name }}
+                      </label>
                       {% endfor %}
                     </div>
                   </li>

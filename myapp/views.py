@@ -59,51 +59,43 @@ def cart(request):
 
     return render(request, "shop-cart.html", context)
 def add_to_cart(request, slug):
-
     product = get_object_or_404(
         Product,
         slug=slug
     )
 
+    size = request.POST.get("size")
+    try:
+        quantity = max(int(request.POST.get("quantity", 1)), 1)
+    except (TypeError, ValueError):
+        quantity = 1
+
     cart = Cart(request)
 
-    cart.add(product)
+    cart.add(product, size, quantity)
 
     return redirect("cart")
-def remove_from_cart(request, product_id):
-
-    product = get_object_or_404(
-        Product,
-        id=product_id
-    )
-
+def remove_from_cart(request, cart_key):
     cart = Cart(request)
-
-    cart.remove(product)
+    cart.remove(cart_key)
 
     return redirect("cart")
-def increase_quantity(request, product_id):
 
-    product = get_object_or_404(
-        Product,
-        id=product_id
-    )
 
+def increase_quantity(request, cart_key):
     cart = Cart(request)
+    item = cart.cart.get(cart_key)
 
-    cart.add(product)
+    if item:
+        product = get_object_or_404(Product, id=item["product_id"])
+        cart.add(product, item["size"])
 
     return redirect("cart")
-def decrease_quantity(request, product_id):
 
-    product = get_object_or_404(
-        Product,
-        id=product_id
-    )
 
+def decrease_quantity(request, cart_key):
     cart = Cart(request)
-
-    cart.decrease(product)
+    cart.decrease(cart_key)
 
     return redirect("cart")
 
@@ -149,9 +141,17 @@ def women(request):
         category__slug="women"
     )
 
+    size = request.GET.get("size")
+
+    if size:
+        products = products.filter(
+            sizes__name__iexact=size
+        )
+
     context = {
         "products": products,
         "subcategories": subcategories,
+        "selected_size": size,
     }
 
     return render(request, "women.html", context)
@@ -169,10 +169,17 @@ def women_subcategory(request, subcategory_slug):
     subcategories = SubCategory.objects.filter(
         category__slug="women"
     )
+    size = request.GET.get("size")
+
+    if size:
+        products = products.filter(
+        sizes__name__iexact=size
+    )
 
     context = {
         "products": products,
         "subcategories": subcategories,
+        "selected_size": size
     }
 
     return render(request, "women.html", context)
@@ -185,14 +192,22 @@ def men(request):
         category__slug="men",
         is_available=True
     )
-
+    
     subcategories = SubCategory.objects.filter(
         category__slug="men"
     )
 
+    size = request.GET.get("size")
+
+    if size:
+        products = products.filter(
+            sizes__name__iexact=size
+        )
+
     context = {
         "products": products,
         "subcategories": subcategories,
+        "selected_size": size,
     }
 
     return render(request, "men.html", context)
@@ -203,6 +218,12 @@ def men_subcategory(request, subcategory_slug):
         subcategory__slug=subcategory_slug,
         is_available=True
     )
+    size = request.GET.get("size")
+
+    if size:
+        products = products.filter(
+        sizes__name__iexact=size
+    )
 
     subcategories = SubCategory.objects.filter(
         category__slug="men"
@@ -211,6 +232,7 @@ def men_subcategory(request, subcategory_slug):
     context = {
         "products": products,
         "subcategories": subcategories,
+        "selected_size": size
     }
 
     return render(request, "men.html", context)

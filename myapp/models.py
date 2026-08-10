@@ -43,7 +43,13 @@ class SubCategory(models.Model):
     def __str__(self):
         return f"{self.category.name} - {self.name}"
 
+# for size model 
+class Size(models.Model):
+    name = models.CharField(max_length=10, unique=True)
 
+    def __str__(self):
+        return self.name
+#size model end here
 # ===========================
 # Product Model
 # ===========================
@@ -59,7 +65,7 @@ class Product(models.Model):
         SubCategory,
         on_delete=models.CASCADE
     )
-
+    sizes = models.ManyToManyField(Size, blank=True)
     name = models.CharField(max_length=200)
 
     slug = models.SlugField(unique=True, blank=True)

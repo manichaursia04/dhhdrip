@@ -149,6 +149,9 @@
                 <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
                 <div class="cart__product__item__title">
                     <h6>{{ item.product.name }}</h6>
+                    {% if item.size %}
+                    <p>Size: {{ item.size }}</p>
+                    {% endif %}
                 </div>
             </td>
 
@@ -159,7 +162,7 @@
             <td class="cart__quantity">
                 <div class="d-flex align-items-center justify-content-center">
 
-                    <a href="{% url 'decrease_quantity' item.product.id %}"
+                    <a href="{% url 'decrease_quantity' item.cart_key %}"
                        class="btn btn-light btn-sm">
                         <i class="fa fa-minus"></i>
                     </a>
@@ -171,7 +174,7 @@
                         class="form-control text-center mx-2"
                         style="width:60px;">
 
-                    <a href="{% url 'increase_quantity' item.product.id %}"
+                    <a href="{% url 'increase_quantity' item.cart_key %}"
                        class="btn btn-light btn-sm">
                         <i class="fa fa-plus"></i>
                     </a>
@@ -184,7 +187,7 @@
             </td>
 
             <td class="cart__close">
-                <a href="{% url 'remove_from_cart' item.product.id %}">
+                <a href="{% url 'remove_from_cart' item.cart_key %}">
                     <span class="icon_close"></span>
                 </a>
             </td>
@@ -393,4 +396,3 @@
 </body>
 
 </html>
-

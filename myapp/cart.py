@@ -13,35 +13,37 @@ class Cart:
 
         self.cart = cart
 
-    def add(self, product):
-        product_id = str(product.id)
+    def add(self, product, size, quantity=1):
+        """Add a product/size combination to the cart."""
+        cart_key = f"{product.id}_{size}"
 
-        if product_id not in self.cart:
-            self.cart[product_id] = {
-                "quantity": 1
+        if cart_key not in self.cart:
+            self.cart[cart_key] = {
+                "product_id": product.id,
+                "quantity": 0,
+                "size": size,
             }
-        else:
-            self.cart[product_id]["quantity"] += 1
+
+        self.cart[cart_key]["quantity"] += quantity
+        self.save()
+
+    def remove(self, cart_key):
+
+        if cart_key in self.cart:
+
+            del self.cart[cart_key]
 
         self.save()
 
-    def remove(self, product):
-        product_id = str(product.id)
+    def decrease(self, cart_key):
 
-        if product_id in self.cart:
-            del self.cart[product_id]
+        if cart_key not in self.cart:
+            return
 
-        self.save()
+        self.cart[cart_key]["quantity"] -= 1
 
-    def decrease(self, product):
-        product_id = str(product.id)
-
-        if product_id in self.cart:
-
-            self.cart[product_id]["quantity"] -= 1
-
-            if self.cart[product_id]["quantity"] <= 0:
-                del self.cart[product_id]
+        if self.cart[cart_key]["quantity"] <= 0:
+            del self.cart[cart_key]
 
         self.save()
 
@@ -50,24 +52,22 @@ class Cart:
 
     def __iter__(self):
 
-        product_ids = self.cart.keys()
+        product_ids = [item["product_id"] for item in self.cart.values()]
+        products = Product.objects.in_bulk(product_ids)
 
-        products = Product.objects.filter(id__in=product_ids)
+        # Copy each item before adding product/price data.  The session itself
+        # must contain only simple values, not Django model objects.
+        for cart_key, stored_item in self.cart.items():
+            product = products.get(stored_item["product_id"])
 
-        cart = self.cart.copy()
+            if product is None:
+                continue
 
-        for product in products:
-            cart[str(product.id)]["product"] = product
-
-        for item in cart.values():
-
-            if item["product"].discount_price:
-                price = item["product"].discount_price
-            else:
-                price = item["product"].price
-
-            item["price"] = price
-            item["total"] = price * item["quantity"]
+            item = stored_item.copy()
+            item["cart_key"] = cart_key
+            item["product"] = product
+            item["price"] = product.discount_price or product.price
+            item["total"] = item["price"] * item["quantity"]
 
             yield item
 
