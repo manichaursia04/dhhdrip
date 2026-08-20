@@ -36,6 +36,7 @@ urlpatterns = [
     path('liked/', views.liked, name='liked'),
     path('login/', views.login, name='login'),
     path('register/', views.register, name='register'),
+    path("logout/", views.logout, name="logout"),
     path(
     "add-to-cart/<slug:slug>/",
     views.add_to_cart,
@@ -52,6 +53,11 @@ path(
     "cart/increase/<str:cart_key>/",
     views.increase_quantity,
     name="increase_quantity",
+),
+path(
+    "order-success/<int:order_id>/",
+    views.order_success,
+    name="order_success",
 ),
 
 path(
