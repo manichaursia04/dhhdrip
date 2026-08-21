@@ -589,71 +589,6 @@ def login(request):
     )
 
 
-def register(request):
-
-    if request.user.is_authenticated:
-        return redirect("home")
-
-    next_url = request.GET.get("next") or request.POST.get("next")
-
-    if request.method == "POST":
-
-        first_name = request.POST.get("first_name", "").strip()
-        last_name = request.POST.get("last_name", "").strip()
-        email = request.POST.get("email", "").strip().lower()
-        password = request.POST.get("password", "")
-        confirm_password = request.POST.get("confirm_password", "")
-
-        # Check password
-        if password != confirm_password:
-
-            return render(
-                request,
-                "register.html",
-                {
-                    "error": "Passwords do not match.",
-                    "next": next_url,
-                }
-            )
-
-        # Check existing email
-        if User.objects.filter(email__iexact=email).exists():
-
-            return render(
-                request,
-                "register.html",
-                {
-                    "error": "An account with this email already exists.",
-                    "next": next_url,
-                }
-            )
-
-        # Create username from email
-        username = email
-
-        user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=password,
-            first_name=first_name,
-            last_name=last_name,
-        )
-
-        # Automatically login after registration
-        auth_login(request, user)
-
-        if next_url:
-            return redirect(next_url)
-
-        return redirect("home")
-
-    return render(
-        request,
-        "register.html",
-        {
-            "next": next_url,
-        }
-    )
 
 
 def base(request):
@@ -667,3 +602,177 @@ def logout(request):
     auth_logout(request)
 
     return redirect("home")
+
+
+
+#otp code setup
+
+from django.contrib import messages
+from django.conf import settings
+from django.core.mail import send_mail
+from django.contrib.auth import authenticate, login as auth_login
+import random
+import time
+
+def register(request):
+
+    if request.method == "POST":
+
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+
+        # Check if email already exists
+        if User.objects.filter(username=email).exists():
+            messages.error(
+                request,
+                "An account with this email already exists."
+            )
+            return redirect("register")
+
+        # Generate 6 digit OTP
+        verification_code = str(
+            random.randint(100000, 999999)
+        )
+
+        # Store registration information temporarily
+        request.session["registration_data"] = {
+            "first_name": first_name,
+            "last_name": last_name,
+            "email": email,
+            "password": password,
+        }
+
+        # Store OTP
+        request.session["verification_code"] = verification_code
+
+        # OTP expiry time: 10 minutes
+        request.session["verification_expiry"] = (
+            time.time() + 600
+        )
+
+        # Send verification email
+        send_mail(
+            "Verify your email - Your Store",
+            f"""
+Hello {first_name},
+
+Your email verification code is:
+
+{verification_code}
+
+This code will expire in 10 minutes.
+
+If you did not create an account, you can ignore this email.
+
+Thank you.
+""",
+            settings.DEFAULT_FROM_EMAIL,
+            [email],
+            fail_silently=False,
+        )
+
+        messages.success(
+            request,
+            "Verification code sent to your email."
+        )
+
+        return redirect("verify_email")
+
+    return render(request, "register.html")
+
+def verify_email(request):
+
+    if "registration_data" not in request.session:
+        messages.error(
+            request,
+            "Your registration session has expired. Please register again."
+        )
+        return redirect("register")
+
+    if request.method == "POST":
+
+        entered_code = request.POST.get(
+            "verification_code"
+        )
+
+        saved_code = request.session.get(
+            "verification_code"
+        )
+
+        expiry = request.session.get(
+            "verification_expiry"
+        )
+
+        # Check expiry
+        if not expiry or time.time() > expiry:
+
+            request.session.pop(
+                "verification_code",
+                None
+            )
+
+            request.session.pop(
+                "verification_expiry",
+                None
+            )
+
+            messages.error(
+                request,
+                "Verification code expired. Please register again."
+            )
+
+            return redirect("register")
+
+        # Check OTP
+        if entered_code != saved_code:
+
+            messages.error(
+                request,
+                "Invalid verification code."
+            )
+
+            return redirect("verify_email")
+
+        # Get registration information
+        registration_data = request.session.get(
+            "registration_data"
+        )
+
+        # Create user
+        user = User.objects.create_user(
+            username=registration_data["email"],
+            email=registration_data["email"],
+            password=registration_data["password"],
+            first_name=registration_data["first_name"],
+            last_name=registration_data["last_name"],
+        )
+
+        # Remove temporary registration data
+        request.session.pop(
+            "registration_data",
+            None
+        )
+
+        request.session.pop(
+            "verification_code",
+            None
+        )
+
+        request.session.pop(
+            "verification_expiry",
+            None
+        )
+
+        messages.success(
+            request,
+            "Email verified successfully. You can now login."
+        )
+
+        return redirect("login")
+
+    return render(
+        request,
+        "verify-email.html"
+    )

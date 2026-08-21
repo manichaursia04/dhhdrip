@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Verify Email</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/bootstrap.min.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/style.css' %}"
+    >
+
+</head>
+
+<body>
+
+<section class="checkout spad">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-6">
+
+                <div class="checkout__form">
+
+                    <h3>
+                        Verify Your Email
+                    </h3>
+
+                    <br>
+
+                    <p>
+                        We have sent a 6-digit verification
+                        code to your email address.
+                    </p>
+
+                    <br>
+
+                    {% if messages %}
+
+                        {% for message in messages %}
+
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+
+                        {% endfor %}
+
+                    {% endif %}
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <div class="checkout__form__input">
+
+                            <p>
+                                Verification Code
+                                <span>*</span>
+                            </p>
+
+                            <input
+                                type="text"
+                                name="verification_code"
+                                maxlength="6"
+                                minlength="6"
+                                placeholder="Enter 6-digit code"
+                                required
+                            >
+
+                        </div>
+
+                        <br>
+
+                        <button
+                            type="submit"
+                            class="site-btn"
+                        >
+                            VERIFY EMAIL
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</body>
+
+</html> 

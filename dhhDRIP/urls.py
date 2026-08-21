@@ -36,6 +36,8 @@ urlpatterns = [
     path('liked/', views.liked, name='liked'),
     path('login/', views.login, name='login'),
     path('register/', views.register, name='register'),
+    path("verify-email/",views.verify_email,name="verify_email"
+),
     path("logout/", views.logout, name="logout"),
     path(
     "add-to-cart/<slug:slug>/",
