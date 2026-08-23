@@ -105,26 +105,47 @@ class Product(models.Model):
 
 
 # Order Model
-
 class Order(models.Model):
 
+    STATUS_CHOICES = [
+        ("Pending", "Order Placed"),
+        ("Confirmed", "Confirmed"),
+        ("Processing", "Processing"),
+        ("Shipped", "Shipped"),
+        ("Out for Delivery", "Out for Delivery"),
+        ("Delivered", "Delivered"),
+        ("Cancelled", "Cancelled"),
+    ]
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="orders",
+        null=True,
+        blank=True
+    )
+
     first_name = models.CharField(max_length=100)
+
     last_name = models.CharField(max_length=100)
 
     country = models.CharField(max_length=100)
 
     address = models.CharField(max_length=255)
+
     apartment = models.CharField(
         max_length=255,
         blank=True
     )
 
     city = models.CharField(max_length=100)
+
     state = models.CharField(max_length=100)
 
     postcode = models.CharField(max_length=20)
 
     phone = models.CharField(max_length=20)
+
     email = models.EmailField()
 
     order_notes = models.TextField(
@@ -156,25 +177,13 @@ class Order(models.Model):
     )
 
     status = models.CharField(
-        max_length=20,
+        max_length=30,
+        choices=STATUS_CHOICES,
         default="Pending"
     )
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name="orders",
-        null=True,
-        blank=True
-    )
-
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
 
     def __str__(self):
         return f"Order #{self.id} - {self.first_name} {self.last_name}"
-# ===========================
-# Order Item Model
-# ===========================
 
 class OrderItem(models.Model):
 

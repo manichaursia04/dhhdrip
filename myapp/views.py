@@ -165,6 +165,7 @@ def checkout(request):
     # GET - SHOW CHECKOUT
     # =====================================================
 
+
     subtotal = cart.get_total_price()
 
     tax = subtotal * Decimal("0.18")
@@ -775,4 +776,294 @@ def verify_email(request):
     return render(
         request,
         "verify-email.html"
+    )
+
+#password reset
+from datetime import timedelta
+import random
+from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
+from django.utils import timezone
+
+# ==========================================
+# FORGOT PASSWORD
+# ==========================================
+
+def forgot_password(request):
+
+    User = get_user_model()
+
+    # ==========================================
+    # GET
+    # ==========================================
+
+    if request.method == "GET":
+
+        # Start with a clean password-reset session
+        request.session.pop("reset_email", None)
+        request.session.pop("reset_otp", None)
+        request.session.pop("reset_otp_expires", None)
+        request.session.pop("reset_verified", None)
+
+        return render(
+            request,
+            "password_reset.html"
+        )
+
+    # ==========================================
+    # POST
+    # ==========================================
+
+    # ------------------------------------------
+    # STEP 1 - SEND OTP
+    # ------------------------------------------
+
+    email = request.POST.get("email")
+
+    if email and not request.POST.get("otp") and not request.POST.get("new_password"):
+
+        email = email.strip().lower()
+
+        # Check whether user exists
+        user = User.objects.filter(
+            email__iexact=email
+        ).first()
+
+        if not user:
+
+            # Don't reveal whether an account exists
+            return render(
+                request,
+                "password_reset.html",
+                {
+                    "step": "email",
+                    "error": "If an account exists with this email, a verification code has been sent."
+                }
+            )
+
+        # Generate 6-digit OTP
+        otp = str(random.randint(100000, 999999))
+
+        # OTP valid for 10 minutes
+        expires = timezone.now() + timedelta(minutes=10)
+
+        # Store information in session
+        request.session["reset_email"] = email
+        request.session["reset_otp"] = otp
+        request.session["reset_otp_expires"] = expires.isoformat()
+        request.session["reset_verified"] = False
+
+        # Send email
+        send_mail(
+            subject="dhhDRIP Password Reset Code",
+
+            message=f"""
+Hello {user.first_name or user.username},
+
+We received a request to reset your dhhDRIP password.
+
+Your password reset verification code is:
+
+{otp}
+
+This code is valid for 10 minutes.
+
+If you did not request a password reset, please ignore this email.
+
+Thank you,
+dhhDRIP
+""",
+
+            from_email=settings.DEFAULT_FROM_EMAIL,
+
+            recipient_list=[user.email],
+
+            fail_silently=False,
+        )
+
+        return render(
+            request,
+            "password_reset.html",
+            {
+                "step": "otp",
+                "email": email,
+            }
+        )
+
+    # ------------------------------------------
+    # STEP 2 - VERIFY OTP
+    # ------------------------------------------
+
+    otp = request.POST.get("otp")
+
+    if otp:
+
+        saved_otp = request.session.get("reset_otp")
+        saved_email = request.session.get("reset_email")
+        expires_string = request.session.get("reset_otp_expires")
+
+        if not saved_otp or not saved_email or not expires_string:
+
+            return render(
+                request,
+                "password_reset.html",
+                {
+                    "step": "email",
+                    "error": "Your verification session has expired. Please request a new code."
+                }
+            )
+
+        # Check expiration
+        try:
+            expires = timezone.datetime.fromisoformat(
+                expires_string
+            )
+        except ValueError:
+
+            return render(
+                request,
+                "password_reset.html",
+                {
+                    "step": "email",
+                    "error": "Invalid verification session. Please request a new code."
+                }
+            )
+
+        if timezone.is_naive(expires):
+
+            expires = timezone.make_aware(expires)
+
+        if timezone.now() > expires:
+
+            request.session.pop("reset_otp", None)
+            request.session.pop("reset_otp_expires", None)
+
+            return render(
+                request,
+                "password_reset.html",
+                {
+                    "step": "otp",
+                    "email": saved_email,
+                    "error": "Your verification code has expired. Please request a new one."
+                }
+            )
+
+        # Check OTP
+        if otp.strip() != saved_otp:
+
+            return render(
+                request,
+                "password_reset.html",
+                {
+                    "step": "otp",
+                    "email": saved_email,
+                    "error": "Invalid verification code."
+                }
+            )
+
+        # OTP correct
+        request.session["reset_verified"] = True
+
+        # Remove OTP so it cannot be reused
+        request.session.pop("reset_otp", None)
+        request.session.pop("reset_otp_expires", None)
+
+        return render(
+            request,
+            "password_reset.html",
+            {
+                "step": "password",
+                "email": saved_email,
+            }
+        )
+
+    # ------------------------------------------
+    # STEP 3 - CHANGE PASSWORD
+    # ------------------------------------------
+
+    new_password = request.POST.get("new_password")
+    confirm_password = request.POST.get("confirm_password")
+
+    if new_password:
+
+        email = request.session.get("reset_email")
+        verified = request.session.get("reset_verified")
+
+        # Make sure OTP was verified
+        if not email or not verified:
+
+            return render(
+                request,
+                "password_reset.html",
+                {
+                    "step": "email",
+                    "error": "Please verify your email first."
+                }
+            )
+
+        # Check passwords
+        if new_password != confirm_password:
+
+            return render(
+                request,
+                "password_reset.html",
+                {
+                    "step": "password",
+                    "email": email,
+                    "error": "Passwords do not match."
+                }
+            )
+
+        # Basic password length check
+        if len(new_password) < 8:
+
+            return render(
+                request,
+                "password_reset.html",
+                {
+                    "step": "password",
+                    "email": email,
+                    "error": "Password must contain at least 8 characters."
+                }
+            )
+
+        # Find user
+        user = User.objects.filter(
+            email__iexact=email
+        ).first()
+
+        if not user:
+
+            return render(
+                request,
+                "password_reset.html",
+                {
+                    "step": "email",
+                    "error": "Unable to reset this account."
+                }
+            )
+
+        # IMPORTANT:
+        # set_password hashes the password correctly.
+        user.set_password(new_password)
+        user.save()
+
+        # Clear reset session
+        request.session.pop("reset_email", None)
+        request.session.pop("reset_verified", None)
+        request.session.pop("reset_otp", None)
+        request.session.pop("reset_otp_expires", None)
+
+        return render(
+            request,
+            "password_reset.html",
+            {
+                "step": "success"
+            }
+        )
+
+    # Fallback
+    return render(
+        request,
+        "password_reset.html"
     )
