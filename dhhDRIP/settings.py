@@ -25,7 +25,11 @@ SECRET_KEY = 'django-insecure-)a#*qt0c+3sr%d7qjvv^#m^s50p-&u2^sooh130=!!5d1q(+p#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "dhhdrip-gefq.onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
 
 
 # Application definition
