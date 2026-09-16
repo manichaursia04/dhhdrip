@@ -158,4 +158,4 @@ ANYMAIL = {
     "RESEND_API_KEY": os.environ.get("RESEND_API_KEY"),
 }
 
-DEFAULT_FROM_EMAIL = "dhhDRIP <onboarding@resend.dev>"
+DEFAULT_FROM_EMAIL = "dhhDRIP <noreply@dhhdrip.com>"
