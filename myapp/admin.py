@@ -16,6 +16,7 @@ admin.site.register(Category)
 admin.site.register(Size)
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
+
     list_display = (
         "id",
         "first_name",
@@ -37,6 +38,10 @@ class OrderAdmin(admin.ModelAdmin):
         "last_name",
         "email",
         "phone",
+    )
+
+    list_editable = (
+        "status",
     )
 
 

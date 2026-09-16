@@ -11,7 +11,7 @@
   <ul class="offcanvas__widget">
     <li><span class="icon_search search-switch"></span></li>
     <li>
-      <a href="{% url 'wishlist' %}"
+      <a href="{% url 'my_orders' %}"
         ><span class="icon_heart_alt"></span>
         <div class="tip">4</div>
       </a>
@@ -81,7 +81,7 @@
                 <li><a href="#">Product Details</a></li>
                 <li><a href="{% url 'cart' %}">Shop Cart</a></li>
                 <li><a href="{% url 'checkout' %}">Checkout</a></li>
-                <li><a href="{% url 'wishlist' %}">Wishlist</a></li>
+                <li><a href="{% url 'my_orders' %}">Wishlist</a></li>
                 <li><a href="{% url 'liked' %}">Liked</a></li>
                 {% if user.is_authenticated %}
                 <li><span>Hi, {{ user.first_name|default:user.username }}</span></li>
@@ -120,7 +120,7 @@
           <ul class="header__right__widget">
             <li><span class="icon_search search-switch"></span></li>
             <li>
-              <a href="{% url 'wishlist' %}"
+              <a href="{% url 'my_orders' %}"
                 ><span class="icon_heart_alt"></span>
                 <div class="tip">4</div>
               </a>

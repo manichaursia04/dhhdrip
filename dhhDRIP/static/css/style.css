@@ -3775,3 +3775,116 @@ ol {
 		font-size: 24px;
 	}
 }
+/* =========================================
+   ORDER TRACKING
+========================================= */
+
+.order-tracking {
+    margin-top: 40px;
+    position: relative;
+}
+
+.tracking-step {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    padding-bottom: 35px;
+    opacity: 0.35;
+}
+
+.tracking-step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 20px;
+    top: 42px;
+    width: 2px;
+    height: 35px;
+    background: #ddd;
+}
+
+.tracking-step.active {
+    opacity: 1;
+}
+
+.tracking-step.active:not(:last-child)::after {
+    background: #111;
+}
+
+.tracking-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    font-weight: bold;
+    z-index: 2;
+}
+
+.tracking-step.active .tracking-icon {
+    background: #111;
+    color: #fff;
+    border-color: #111;
+}
+
+.tracking-step strong {
+    display: block;
+    font-size: 16px;
+}
+
+.tracking-step small {
+    display: block;
+    margin-top: 5px;
+    color: #777;
+}
+
+.current-status {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f7f7f7;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.current-status span {
+    color: #777;
+}
+
+.current-status strong {
+    font-size: 18px;
+}
+
+.order-info {
+    margin-top: 35px;
+    padding-top: 25px;
+    border-top: 1px solid #eee;
+}
+
+.order-info h5 {
+    margin-bottom: 20px;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.order-item p {
+    margin: 5px 0 0;
+    color: #777;
+}
+
+.order-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 2px solid #111;
+    font-size: 20px;
+}

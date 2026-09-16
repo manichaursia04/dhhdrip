@@ -1,0 +1,709 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Track Order | dhhDRIP{% endblock %}
+
+{% block instagram %}{% endblock %}
+
+{% block content %}
+<style>
+
+    /* ==============================
+       ORDER TRACKING CONTAINER
+    ============================== */
+
+    .order-tracking {
+        position: relative;
+        margin-top: 40px;
+        padding: 0;
+    }
+
+
+    /* ==============================
+       EACH TRACKING STEP
+    ============================== */
+
+    .tracking-step {
+        position: relative;
+
+        display: flex;
+        align-items: flex-start;
+
+        min-height: 100px;
+
+        opacity: 0.3;
+
+        transition: all 0.3s ease;
+    }
+
+
+    /* Completed steps */
+
+    .tracking-step.completed {
+        opacity: 1;
+    }
+
+
+    /* ==============================
+       TRACKING CIRCLE
+    ============================== */
+
+    .tracking-icon {
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+
+        border-radius: 50%;
+
+        background: #ffffff;
+
+        border: 2px solid #e5e5e5;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        color: #bdbdbd;
+
+        font-size: 20px;
+        font-weight: 600;
+
+        position: relative;
+
+        z-index: 5;
+
+        transition: all 0.3s ease;
+    }
+
+
+    /* ==============================
+       COMPLETED CIRCLE
+    ============================== */
+
+    .tracking-step.completed .tracking-icon {
+        border-color: #111111;
+        color: #111111;
+        background: #ffffff;
+    }
+
+
+    /* ==============================
+       CURRENT STATUS CIRCLE
+    ============================== */
+
+    .tracking-step.current .tracking-icon {
+        background: #111111;
+        border-color: #111111;
+        color: #ffffff;
+    }
+
+
+    /* ==============================
+       TEXT AREA
+    ============================== */
+
+    .tracking-content {
+        margin-left: 22px;
+        padding-top: 2px;
+    }
+
+
+    /* Normal / future text */
+
+    .tracking-content strong {
+        display: block;
+
+        font-size: 18px;
+
+        font-weight: 400;
+
+        color: #b5b5b5;
+
+        transition: all 0.3s ease;
+    }
+
+
+    /* Completed text */
+
+    .tracking-step.completed .tracking-content strong {
+        color: #111111;
+        font-weight: 600;
+    }
+
+
+    /* Current text */
+
+    .tracking-step.current .tracking-content strong {
+        color: #111111;
+        font-weight: 700;
+    }
+
+
+    /* ==============================
+       TIMESTAMP
+    ============================== */
+
+    .tracking-content small {
+        display: block;
+
+        margin-top: 6px;
+
+        font-size: 13px;
+
+        color: #999999;
+    }
+
+
+    /* ==============================
+       VERTICAL PROGRESS LINE
+    ============================== */
+
+    .tracking-step:not(:last-child)::after {
+        content: "";
+
+        position: absolute;
+
+        left: 22px;
+        top: 46px;
+
+        width: 2px;
+        height: 54px;
+
+        background: #e5e5e5;
+
+        z-index: 1;
+
+        transition: background 0.3s ease;
+    }
+
+
+    /* BLACK PROGRESS LINE */
+
+    .tracking-step.completed:not(:last-child)::after {
+        background: #111111;
+    }
+
+
+    /* ==============================
+       CURRENT STATUS BOX
+    ============================== */
+
+    .current-status {
+        margin-top: 25px;
+
+        padding: 18px 22px;
+
+        background: #f8f8f8;
+
+        border-radius: 5px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+
+    .current-status span {
+        font-size: 15px;
+        color: #777777;
+    }
+
+
+    .current-status strong {
+        font-size: 16px;
+        font-weight: 700;
+        color: #111111;
+    }
+
+
+    /* ==============================
+       ORDER INFORMATION
+    ============================== */
+
+    .order-info {
+        margin-top: 30px;
+
+        padding: 25px;
+
+        border: 1px solid #eeeeee;
+
+        border-radius: 5px;
+    }
+
+
+    .order-info h5 {
+        margin-bottom: 18px;
+
+        font-weight: 600;
+    }
+
+
+    /* ==============================
+       ORDER ITEMS
+    ============================== */
+
+    .order-item {
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        padding: 15px 0;
+
+        border-bottom: 1px solid #eeeeee;
+    }
+
+
+    .order-item:last-child {
+        border-bottom: none;
+    }
+
+
+    .order-item p {
+        margin: 5px 0 0;
+
+        font-size: 14px;
+
+        color: #777777;
+    }
+
+
+    /* ==============================
+       TOTAL
+    ============================== */
+
+    .order-total {
+        margin-top: 25px;
+
+        padding-top: 20px;
+
+        border-top: 1px solid #eeeeee;
+
+        display: flex;
+
+        justify-content: space-between;
+
+        font-size: 18px;
+    }
+
+
+    /* ==============================
+       MOBILE
+    ============================== */
+
+    @media (max-width: 576px) {
+
+        .tracking-content {
+            margin-left: 15px;
+        }
+
+        .tracking-content strong {
+            font-size: 16px;
+        }
+
+        .tracking-icon {
+            width: 42px;
+            height: 42px;
+            min-width: 42px;
+        }
+
+        .tracking-step:not(:last-child)::after {
+            left: 20px;
+            top: 42px;
+            height: 58px;
+        }
+
+    }
+
+</style>
+
+<section class="auth-section spad">
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-lg-10">
+
+                <div class="auth-card">
+
+                    <div class="auth-card__form">
+
+                        <h4>
+                            Track Order #{{ order.id }}
+                        </h4>
+
+                        <p class="auth-card__subtitle">
+                            Placed on {{ order.created_at|date:"d M Y, h:i A" }}
+                        </p>
+
+
+                        <!-- ========================= -->
+                        <!-- ORDER STATUS -->
+                        <!-- ========================= -->
+
+                        <!-- ========================= -->
+<!-- ORDER STATUS -->
+<!-- ========================= -->
+
+<div class="order-tracking">
+
+    <!-- ORDER PLACED -->
+    <div class="tracking-step
+        {% if current_status_index >= 0 %}completed{% endif %}
+        {% if current_status_index == 0 %}current{% endif %}
+    ">
+
+        <div class="tracking-icon">
+            ✓
+        </div>
+
+        <div class="tracking-content">
+            <strong>Order Placed</strong>
+
+            <small>
+                {{ order.created_at|date:"d M Y, h:i A" }}
+            </small>
+        </div>
+
+    </div>
+
+
+    <!-- CONFIRMED -->
+    <div class="tracking-step
+        {% if current_status_index >= 1 %}completed{% endif %}
+        {% if current_status_index == 1 %}current{% endif %}
+    ">
+
+        <div class="tracking-icon">
+            ✓
+        </div>
+
+        <div class="tracking-content">
+            <strong>Confirmed</strong>
+
+            {% if order.confirmed_at %}
+                <small>
+                    {{ order.confirmed_at|date:"d M Y, h:i A" }}
+                </small>
+            {% endif %}
+        </div>
+
+    </div>
+
+
+    <!-- PROCESSING -->
+    <div class="tracking-step
+        {% if current_status_index >= 2 %}completed{% endif %}
+        {% if current_status_index == 2 %}current{% endif %}
+    ">
+
+        <div class="tracking-icon">
+            ✓
+        </div>
+
+        <div class="tracking-content">
+            <strong>Processing</strong>
+
+            {% if order.processing_at %}
+                <small>
+                    {{ order.processing_at|date:"d M Y, h:i A" }}
+                </small>
+            {% endif %}
+        </div>
+
+    </div>
+
+
+    <!-- SHIPPED -->
+    <div class="tracking-step
+        {% if current_status_index >= 3 %}completed{% endif %}
+        {% if current_status_index == 3 %}current{% endif %}
+    ">
+
+        <div class="tracking-icon">
+            ✓
+        </div>
+
+        <div class="tracking-content">
+            <strong>Shipped</strong>
+
+            {% if order.shipped_at %}
+                <small>
+                    {{ order.shipped_at|date:"d M Y, h:i A" }}
+                </small>
+            {% endif %}
+        </div>
+
+    </div>
+
+
+    <!-- OUT FOR DELIVERY -->
+    <div class="tracking-step
+        {% if current_status_index >= 4 %}completed{% endif %}
+        {% if current_status_index == 4 %}current{% endif %}
+    ">
+
+        <div class="tracking-icon">
+            ✓
+        </div>
+
+        <div class="tracking-content">
+            <strong>Out for Delivery</strong>
+
+            {% if order.out_for_delivery_at %}
+                <small>
+                    {{ order.out_for_delivery_at|date:"d M Y, h:i A" }}
+                </small>
+            {% endif %}
+        </div>
+
+    </div>
+
+
+    <!-- DELIVERED -->
+    <div class="tracking-step
+        {% if current_status_index >= 5 %}completed{% endif %}
+        {% if current_status_index == 5 %}current{% endif %}
+    ">
+
+        <div class="tracking-icon">
+            ✓
+        </div>
+
+        <div class="tracking-content">
+            <strong>Delivered</strong>
+
+            {% if order.delivered_at %}
+                <small>
+                    {{ order.delivered_at|date:"d M Y, h:i A" }}
+                </small>
+            {% endif %}
+        </div>
+
+    </div>
+
+</div>
+
+
+                            <div class="tracking-step
+                                {% if order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Out for Delivery' or order.status == 'Delivered' %}
+                                    active
+                                {% endif %}
+                            ">
+
+                                <div class="tracking-icon">
+                                    ✓
+                                </div>
+
+                                <div>
+                                    <strong>Processing</strong>
+
+                                    {% if order.processing_at %}
+                                        <small>
+                                            {{ order.processing_at|date:"d M Y, h:i A" }}
+                                        </small>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+
+
+                            <div class="tracking-step
+                                {% if order.status == 'Shipped' or order.status == 'Out for Delivery' or order.status == 'Delivered' %}
+                                    active
+                                {% endif %}
+                            ">
+
+                                <div class="tracking-icon">
+                                    ✓
+                                </div>
+
+                                <div>
+                                    <strong>Shipped</strong>
+
+                                    {% if order.shipped_at %}
+                                        <small>
+                                            {{ order.shipped_at|date:"d M Y, h:i A" }}
+                                        </small>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+
+
+                            <div class="tracking-step
+                                {% if order.status == 'Out for Delivery' or order.status == 'Delivered' %}
+                                    active
+                                {% endif %}
+                            ">
+
+                                <div class="tracking-icon">
+                                    ✓
+                                </div>
+
+                                <div>
+                                    <strong>Out for Delivery</strong>
+
+                                    {% if order.out_for_delivery_at %}
+                                        <small>
+                                            {{ order.out_for_delivery_at|date:"d M Y, h:i A" }}
+                                        </small>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+
+
+                            <div class="tracking-step
+                                {% if order.status == 'Delivered' %}
+                                    active
+                                {% endif %}
+                            ">
+
+                                <div class="tracking-icon">
+                                    ✓
+                                </div>
+
+                                <div>
+                                    <strong>Delivered</strong>
+
+                                    {% if order.delivered_at %}
+                                        <small>
+                                            {{ order.delivered_at|date:"d M Y, h:i A" }}
+                                        </small>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ========================= -->
+                        <!-- CURRENT STATUS -->
+                        <!-- ========================= -->
+
+                        <div class="current-status">
+
+                            <span>Current Status</span>
+
+                            <strong>
+                                {{ order.get_status_display }}
+                            </strong>
+
+                        </div>
+
+
+                        <!-- ========================= -->
+                        <!-- SHIPPING DETAILS -->
+                        <!-- ========================= -->
+
+                        <div class="order-info">
+
+                            <h5>Delivery Details</h5>
+
+                            <p>
+                                <strong>
+                                    {{ order.first_name }}
+                                    {{ order.last_name }}
+                                </strong>
+                            </p>
+
+                            <p>
+                                {{ order.address }}
+                                {% if order.apartment %}
+                                    , {{ order.apartment }}
+                                {% endif %}
+                            </p>
+
+                            <p>
+                                {{ order.city }},
+                                {{ order.state }}
+                                - {{ order.postcode }}
+                            </p>
+
+                            <p>
+                                Phone: {{ order.phone }}
+                            </p>
+
+                        </div>
+
+
+                        <!-- ========================= -->
+                        <!-- ORDER ITEMS -->
+                        <!-- ========================= -->
+
+                        <div class="order-info">
+
+                            <h5>Order Items</h5>
+
+                            {% for item in order.items.all %}
+
+                                <div class="order-item">
+
+                                    <div>
+
+                                        <strong>
+                                            {{ item.product_name }}
+                                        </strong>
+
+                                        <p>
+                                            Size: {{ item.size }}
+                                            |
+                                            Qty: {{ item.quantity }}
+                                        </p>
+
+                                    </div>
+
+                                    <strong>
+                                        ₹{{ item.total }}
+                                    </strong>
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+
+                        <!-- ========================= -->
+                        <!-- TOTAL -->
+                        <!-- ========================= -->
+
+                        <div class="order-total">
+
+                            <span>Total</span>
+
+                            <strong>
+                                ₹{{ order.total }}
+                            </strong>
+
+                        </div>
+
+
+                        <div style="margin-top: 30px;">
+
+                            <a
+                                href="{% url 'home' %}"
+                                class="site-btn"
+                            >
+                                Continue Shopping
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

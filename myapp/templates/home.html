@@ -42,7 +42,7 @@
         <div class="offcanvas__close">+</div>
         <ul class="offcanvas__widget">
             <li><span class="icon_search search-switch"></span></li>
-            <li><a href="{% url 'wishlist' %}"><span class="icon_heart_alt"></span>
+            <li><a href="{% url 'my_orders' %}"><span class="icon_heart_alt"></span>
                 <div class="tip">2</div>
             </a></li>
             <li><a href="{% url 'cart' %}"><span class="icon_bag_alt"></span>
@@ -86,7 +86,7 @@
                                     <li><a href="#">Product Details</a></li>
                                     <li><a href="{% url 'cart' %}">Shop Cart</a></li>
                                     <li><a href="{% url 'checkout' %}">Checkout</a></li>
-                                    <li><a href="{% url 'wishlist' %}">Wishlist</a></li>
+                                    <li><a href="{% url 'my_orders' %}">Wishlist</a></li>
                                     <li><a href="{% url 'liked' %}">Liked</a></li>
                                     {% if user.is_authenticated %}
                                     <li><span>Hi, {{ user.first_name|default:user.username }}</span></li>
@@ -116,7 +116,7 @@
                         </div>
                         <ul class="header__right__widget">
                             <li><span class="icon_search search-switch"></span></li>
-                            <li><a href="{% url 'wishlist' %}"><span class="icon_heart_alt"></span>
+                            <li><a href="{% url 'my_orders' %}"><span class="icon_heart_alt"></span>
                                 <div class="tip">2</div>
                             </a></li>
                             <li><a href="{% url 'cart' %}"><span class="icon_bag_alt"></span>
@@ -632,7 +632,7 @@
                         <li><a href="#">My Account</a></li>
                         <li><a href="#">Orders Tracking</a></li>
                         <li><a href="#">Checkout</a></li>
-                            <li><a href="{% url 'wishlist' %}">Wishlist</a></li>
+                            <li><a href="{% url 'my_orders' %}">Wishlist</a></li>
                     </ul>
                 </div>
             </div>

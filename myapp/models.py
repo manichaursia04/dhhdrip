@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-
+from django.utils import timezone
 
 # ===========================
 # Category Model
@@ -182,9 +182,69 @@ class Order(models.Model):
         default="Pending"
     )
 
+    # Status timestamps
+    confirmed_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    processing_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    shipped_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    out_for_delivery_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    delivered_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    cancelled_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    def save(self, *args, **kwargs):
+
+        if self.pk:
+
+            old_order = Order.objects.get(pk=self.pk)
+
+            if old_order.status != self.status:
+
+                now = timezone.now()
+
+                if self.status == "Confirmed":
+                    self.confirmed_at = now
+
+                elif self.status == "Processing":
+                    self.processing_at = now
+
+                elif self.status == "Shipped":
+                    self.shipped_at = now
+
+                elif self.status == "Out for Delivery":
+                    self.out_for_delivery_at = now
+
+                elif self.status == "Delivered":
+                    self.delivered_at = now
+
+                elif self.status == "Cancelled":
+                    self.cancelled_at = now
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"Order #{self.id} - {self.first_name} {self.last_name}"
-
 class OrderItem(models.Model):
 
     order = models.ForeignKey(

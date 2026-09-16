@@ -53,8 +53,14 @@ urlpatterns = [
         views.blog_details,
         name="blog-details",
     ),
+    path(
+    "track-order/<int:order_id>/",
+    views.track_order,
+    name="track_order"
+),
 
-    path("wishlist/", views.wishlist, name="wishlist"),
+
+    path('my-orders/', views.my_orders, name='my_orders'),
     path("liked/", views.liked, name="liked"),
 
     # =========================
@@ -110,7 +116,17 @@ urlpatterns = [
         views.order_success,
         name="order_success",
     ),
+    path(
+    "my-orders/",
+    views.my_orders,
+    name="my_orders",
+),
 
+path(
+    "track-order/<int:order_id>/",
+    views.track_order,
+    name="track_order",
+),
     #password reset
     path(
     "forgot-password/",

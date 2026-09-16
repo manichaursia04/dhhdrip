@@ -16,6 +16,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import logout
+from django.core.mail import send_mail
+from django.conf import settings
 
 # =========================================================
 # HOME
@@ -66,6 +68,10 @@ def contact(request):
 # CHECKOUT
 # =========================================================
 
+# =========================================================
+# CHECKOUT
+# =========================================================
+
 @login_required(login_url="login")
 def checkout(request):
 
@@ -93,7 +99,10 @@ def checkout(request):
         email = request.POST.get("email")
         order_notes = request.POST.get("order_notes", "")
 
-        # Calculate totals on server
+        # =====================================================
+        # CALCULATE TOTALS ON SERVER
+        # =====================================================
+
         subtotal = cart.get_total_price()
 
         tax = subtotal * Decimal("0.18")
@@ -108,7 +117,6 @@ def checkout(request):
 
         order = Order.objects.create(
 
-            # IMPORTANT
             # Connect order to logged-in customer
             user=request.user,
 
@@ -152,10 +160,58 @@ def checkout(request):
                 total=item["total"],
             )
 
-        # Empty cart
+        # =====================================================
+        # SEND ORDER PLACED SUCCESSFULLY EMAIL
+        # =====================================================
+
+        send_mail(
+            subject="Order Placed Successfully - dhhDRIP",
+
+            message=f"""
+Hello {order.first_name},
+
+🎉 Your order has been placed successfully!
+
+Thank you for shopping with dhhDRIP.
+
+--------------------------------
+ORDER DETAILS
+--------------------------------
+
+Order Number: #{order.id}
+
+Order Status: Order Placed
+
+Total Amount: ₹{order.total}
+
+--------------------------------
+
+Your order has been received successfully.
+
+We will keep you updated when your order status changes.
+
+Thank you for choosing dhhDRIP!
+
+— dhhDRIP Team
+""",
+
+            from_email=settings.DEFAULT_FROM_EMAIL,
+
+            recipient_list=[order.email],
+
+            fail_silently=False,
+        )
+
+        # =====================================================
+        # EMPTY CART
+        # =====================================================
+
         cart.clear()
 
-        # Go to success page
+        # =====================================================
+        # GO TO SUCCESS PAGE
+        # =====================================================
+
         return redirect(
             "order_success",
             order_id=order.id
@@ -164,7 +220,6 @@ def checkout(request):
     # =====================================================
     # GET - SHOW CHECKOUT
     # =====================================================
-
 
     subtotal = cart.get_total_price()
 
@@ -1067,3 +1122,52 @@ dhhDRIP
         request,
         "password_reset.html"
     )
+# =========================================================
+# MY ORDERS
+# =========================================================
+
+@login_required(login_url="login")
+def my_orders(request):
+
+    orders = Order.objects.filter(
+        user=request.user
+    ).order_by("-created_at")
+
+    return render(
+        request,
+        "my-orders.html",
+        {
+            "orders": orders
+        }
+    )
+
+# =========================================================
+# TRACK ORDER
+# =========================================================
+@login_required(login_url="login")
+def track_order(request, order_id):
+
+    order = get_object_or_404(
+        Order,
+        id=order_id,
+        user=request.user
+    )
+
+    status_order = [
+        "Pending",
+        "Confirmed",
+        "Processing",
+        "Shipped",
+        "Out for Delivery",
+        "Delivered",
+    ]
+
+    try:
+        current_status_index = status_order.index(order.status)
+    except ValueError:
+        current_status_index = 0
+
+    return render(request, "track-order.html", {
+        "order": order,
+        "current_status_index": current_status_index,
+    })
