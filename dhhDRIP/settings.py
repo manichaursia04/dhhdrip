@@ -152,6 +152,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 # RESEND EMAIL CONFIGURATION
 # ==============================
 
+
 EMAIL_BACKEND = "anymail.backends.resend.EmailBackend"
 
 ANYMAIL = {
