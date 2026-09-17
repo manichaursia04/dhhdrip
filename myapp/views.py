@@ -199,7 +199,7 @@ Thank you for choosing dhhDRIP!
 
             recipient_list=[order.email],
 
-            fail_silently=False,
+            fail_silently=True,
         )
 
         # =====================================================
