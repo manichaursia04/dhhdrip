@@ -16,12 +16,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import logout
-import requests
 from django.conf import settings
+import requests
 
-# =========================================================
-# BREVO API EMAIL HELPER
-# =========================================================
 
 def send_brevo_email(to_email, subject, html_content):
     url = "https://api.brevo.com/v3/smtp/email"
@@ -31,7 +28,10 @@ def send_brevo_email(to_email, subject, html_content):
         "content-type": "application/json",
     }
     data = {
-        "sender": {"name": "dhhDRIP", "email": settings.BREVO_SENDER_EMAIL},
+        "sender": {
+            "name": "dhhDRIP",
+            "email": settings.BREVO_SENDER_EMAIL,
+        },
         "to": [{"email": to_email}],
         "subject": subject,
         "htmlContent": html_content,
@@ -39,7 +39,6 @@ def send_brevo_email(to_email, subject, html_content):
     response = requests.post(url, headers=headers, json=data, timeout=20)
     response.raise_for_status()
     return response.json()
-
 
 # =========================================================
 # HOME
@@ -193,18 +192,12 @@ def checkout(request):
                 <h2>Order Placed Successfully - dhhDRIP</h2>
                 <p>Hello {order.first_name},</p>
                 <p>Your order has been placed successfully!</p>
-                <p>Thank you for shopping with dhhDRIP.</p>
                 <hr>
-                <h3>ORDER DETAILS</h3>
                 <p><strong>Order Number:</strong> #{order.id}</p>
                 <p><strong>Order Status:</strong> Order Placed</p>
                 <p><strong>Total Amount:</strong> ₹{order.total}</p>
-                <hr>
-                <p>Your order has been received successfully.</p>
-                <p>We will keep you updated when your order status changes.</p>
                 <p>Thank you for choosing dhhDRIP!</p>
-                <p>— dhhDRIP Team</p>
-            """,
+            """
         )
 
         # =====================================================
@@ -715,7 +708,7 @@ def register(request):
         # Send verification email
         send_brevo_email(
             to_email=email,
-            subject="Verify your email - Your Store",
+            subject="Verify your email - dhhDRIP",
             html_content=f"""
                 <h2>Verify your email - dhhDRIP</h2>
                 <p>Hello {first_name},</p>
@@ -724,7 +717,7 @@ def register(request):
                 <p>This code will expire in 10 minutes.</p>
                 <p>If you did not create an account, you can ignore this email.</p>
                 <p>Thank you.</p>
-            """,
+            """
         )
 
         messages.success(
@@ -918,7 +911,7 @@ def forgot_password(request):
                 <p>This code is valid for 10 minutes.</p>
                 <p>If you did not request a password reset, please ignore this email.</p>
                 <p>Thank you,<br>dhhDRIP</p>
-            """,
+            """
         )
 
         return render(
@@ -989,7 +982,14 @@ def forgot_password(request):
             )
 
         # Check OTP
-        if otp.strip() != saved_otp:
+        entered_otp = str(otp).strip()
+        stored_otp = str(saved_otp).strip()
+
+        # TEMPORARY DEBUG: compare what the browser sent with what is in session.
+        print("ENTERED OTP:", entered_otp)
+        print("STORED OTP:", stored_otp)
+
+        if entered_otp != stored_otp:
 
             return render(
                 request,
