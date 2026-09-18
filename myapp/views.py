@@ -16,8 +16,30 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import logout
-from django.core.mail import send_mail
+import requests
 from django.conf import settings
+
+# =========================================================
+# BREVO API EMAIL HELPER
+# =========================================================
+
+def send_brevo_email(to_email, subject, html_content):
+    url = "https://api.brevo.com/v3/smtp/email"
+    headers = {
+        "accept": "application/json",
+        "api-key": settings.BREVO_API_KEY,
+        "content-type": "application/json",
+    }
+    data = {
+        "sender": {"name": "dhhDRIP", "email": settings.BREVO_SENDER_EMAIL},
+        "to": [{"email": to_email}],
+        "subject": subject,
+        "htmlContent": html_content,
+    }
+    response = requests.post(url, headers=headers, json=data, timeout=20)
+    response.raise_for_status()
+    return response.json()
+
 
 # =========================================================
 # HOME
@@ -164,42 +186,25 @@ def checkout(request):
         # SEND ORDER PLACED SUCCESSFULLY EMAIL
         # =====================================================
 
-        send_mail(
+        send_brevo_email(
+            to_email=order.email,
             subject="Order Placed Successfully - dhhDRIP",
-
-            message=f"""
-Hello {order.first_name},
-
-🎉 Your order has been placed successfully!
-
-Thank you for shopping with dhhDRIP.
-
---------------------------------
-ORDER DETAILS
---------------------------------
-
-Order Number: #{order.id}
-
-Order Status: Order Placed
-
-Total Amount: ₹{order.total}
-
---------------------------------
-
-Your order has been received successfully.
-
-We will keep you updated when your order status changes.
-
-Thank you for choosing dhhDRIP!
-
-— dhhDRIP Team
-""",
-
-            from_email=settings.DEFAULT_FROM_EMAIL,
-
-            recipient_list=[order.email],
-
-            fail_silently=True,
+            html_content=f"""
+                <h2>Order Placed Successfully - dhhDRIP</h2>
+                <p>Hello {order.first_name},</p>
+                <p>Your order has been placed successfully!</p>
+                <p>Thank you for shopping with dhhDRIP.</p>
+                <hr>
+                <h3>ORDER DETAILS</h3>
+                <p><strong>Order Number:</strong> #{order.id}</p>
+                <p><strong>Order Status:</strong> Order Placed</p>
+                <p><strong>Total Amount:</strong> ₹{order.total}</p>
+                <hr>
+                <p>Your order has been received successfully.</p>
+                <p>We will keep you updated when your order status changes.</p>
+                <p>Thank you for choosing dhhDRIP!</p>
+                <p>— dhhDRIP Team</p>
+            """,
         )
 
         # =====================================================
@@ -665,7 +670,6 @@ def logout(request):
 
 from django.contrib import messages
 from django.conf import settings
-from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login as auth_login
 import random
 import time
@@ -709,24 +713,18 @@ def register(request):
         )
 
         # Send verification email
-        send_mail(
-            "Verify your email - Your Store",
-            f"""
-Hello {first_name},
-
-Your email verification code is:
-
-{verification_code}
-
-This code will expire in 10 minutes.
-
-If you did not create an account, you can ignore this email.
-
-Thank you.
-""",
-            settings.DEFAULT_FROM_EMAIL,
-            [email],
-            fail_silently=False,
+        send_brevo_email(
+            to_email=email,
+            subject="Verify your email - Your Store",
+            html_content=f"""
+                <h2>Verify your email - dhhDRIP</h2>
+                <p>Hello {first_name},</p>
+                <p>Your email verification code is:</p>
+                <h1>{verification_code}</h1>
+                <p>This code will expire in 10 minutes.</p>
+                <p>If you did not create an account, you can ignore this email.</p>
+                <p>Thank you.</p>
+            """,
         )
 
         messages.success(
@@ -837,7 +835,6 @@ def verify_email(request):
 from datetime import timedelta
 import random
 from django.contrib.auth import get_user_model
-from django.core.mail import send_mail
 from django.utils import timezone
 
 # ==========================================
@@ -909,31 +906,19 @@ def forgot_password(request):
         request.session["reset_verified"] = False
 
         # Send email
-        send_mail(
+        send_brevo_email(
+            to_email=user.email,
             subject="dhhDRIP Password Reset Code",
-
-            message=f"""
-Hello {user.first_name or user.username},
-
-We received a request to reset your dhhDRIP password.
-
-Your password reset verification code is:
-
-{otp}
-
-This code is valid for 10 minutes.
-
-If you did not request a password reset, please ignore this email.
-
-Thank you,
-dhhDRIP
-""",
-
-            from_email=settings.DEFAULT_FROM_EMAIL,
-
-            recipient_list=[user.email],
-
-            fail_silently=False,
+            html_content=f"""
+                <h2>dhhDRIP Password Reset</h2>
+                <p>Hello {user.first_name or user.username},</p>
+                <p>We received a request to reset your dhhDRIP password.</p>
+                <p>Your password reset verification code is:</p>
+                <h1>{otp}</h1>
+                <p>This code is valid for 10 minutes.</p>
+                <p>If you did not request a password reset, please ignore this email.</p>
+                <p>Thank you,<br>dhhDRIP</p>
+            """,
         )
 
         return render(
