@@ -149,14 +149,34 @@ MEDIA_ROOT = BASE_DIR / "media"
 # ==============================
 
 # ==============================
-# RESEND EMAIL CONFIGURATION
+# EMAIL CONFIGURATION - BREVO
 # ==============================
 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-EMAIL_BACKEND = "anymail.backends.resend.EmailBackend"
+EMAIL_HOST = os.environ.get(
+    "BREVO_SMTP_HOST",
+    "smtp-relay.brevo.com"
+)
 
-ANYMAIL = {
-    "RESEND_API_KEY": os.environ.get("RESEND_API_KEY"),
-}
+EMAIL_PORT = int(
+    os.environ.get(
+        "BREVO_SMTP_PORT",
+        "587"
+    )
+)
 
-DEFAULT_FROM_EMAIL = "dhhDRIP <onboarding@resend.dev>"
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = os.environ.get(
+    "BREVO_SMTP_USER"
+)
+
+EMAIL_HOST_PASSWORD = os.environ.get(
+    "BREVO_SMTP_PASSWORD"
+)
+
+DEFAULT_FROM_EMAIL = os.environ.get(
+    "DEFAULT_FROM_EMAIL",
+    EMAIL_HOST_USER
+)
